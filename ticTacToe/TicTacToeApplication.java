@@ -13,6 +13,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 
+
+
 public class TicTacToeApplication extends Application{
     private String currentPlayer="X";
     private ArrayList<Button> lista=new ArrayList<>();
@@ -21,6 +23,8 @@ public class TicTacToeApplication extends Application{
         launch(TicTacToeApplication.class);
     }
 
+    // metoda za generisanje prozora za igru
+    
     @Override
     public void start(Stage arg0) throws Exception {
         Label l1=new Label("Turn: " + this.currentPlayer);
@@ -35,12 +39,20 @@ public class TicTacToeApplication extends Application{
         gp.setVgap(10);
         gp.setHgap(10);
         
+        // generisanje 9 tastera, koji imitiraju tablu za igru
+        
         for (int i=0; i<9; i++){
             Button btn=new Button();
             btn.setFont(Font.font("Monospaced", 25));
             btn.setMinSize(70, 70);
             btn.setMaxSize(70, 70);
             
+            /* zadavanje akcije buttonima, ukoliko je igra zavrsena buttoni se deaktiviraju,
+                ukoliko je button slobodan, njegov text property se postavlja na vrednost trenutnog igraca
+                zatim se redom proverava da li je trenutni igrac pobednik ili je mozda svako polje popunjeno, ukoliko 
+                to nije slucaj, igra se nastavlja uz promenu trenutnog igraca
+            */
+
             btn.setOnAction((event)->{
                 if(l1.getText().startsWith("The") || l1.getText().equals("It's draw!")){
                     btn.disarm();
@@ -77,6 +89,8 @@ public class TicTacToeApplication extends Application{
         arg0.show();
     }
 
+    // metoda za promenu trenutnog igraca
+    
     private void takeTurn() {
         if(currentPlayer.equals("X")){
             this.currentPlayer="O";
@@ -85,6 +99,8 @@ public class TicTacToeApplication extends Application{
         }
     }
 
+    // metoda za proveru da li je cela tabla /svi buttoni/ popunjena
+    
     private boolean allBoxesFilled() {
         for(Button b:lista){
             if(b.getText().isEmpty()){
@@ -98,6 +114,11 @@ public class TicTacToeApplication extends Application{
         return checkVertical()||checkHorizontal()||checkDiagonal();
     }
 
+    
+    /* metode za proveru pobednika, provera se vrsi po orijentacijama: vertikalno, horizontalno i dijagonalno, 
+       trazi se bilo koji red/kolona/dijagonala u kojem prvi taster nije prazan i u kojem su druga dva tastera iste vrednosti kao i prvi
+    */
+    
     private boolean checkVertical() {
         if(!lista.get(0).getText().isEmpty() && ((lista.get(0).getText().equals(lista.get(1).getText())) && (lista.get(0).getText().equals(lista.get(2).getText())))){
             return true;
